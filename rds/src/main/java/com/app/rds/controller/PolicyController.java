@@ -1,6 +1,7 @@
 package com.app.rds.controller;
 
 import com.app.rds.entities.Policy;
+import com.app.rds.exceptions.PolicyNotFoundException;
 import com.app.rds.service.IPolicyService;
 import com.app.rds.utility.CustomApiResponse;
 import org.slf4j.Logger;
@@ -32,5 +33,12 @@ public class PolicyController {
                                                              @RequestParam("pageSize") Integer pageSize){
         Page<Policy> policyPage = policyService.getPaginatedPolicies(pageNumber,pageSize);
         return new ResponseEntity<>(policyPage,HttpStatus.OK);
+    }
+
+    @GetMapping("/{policyId}")
+    public ResponseEntity<Policy> getPolicyByPolicyId(@PathVariable Long policyId) throws PolicyNotFoundException {
+        logger.debug("Inside PolicyController's getPolicyByPolicyId method, policyId={}",policyId);
+        Policy policy = policyService.getPolicyByPolicyId(policyId);
+        return new ResponseEntity<>(policy,HttpStatus.OK);
     }
 }
